@@ -1,8 +1,4 @@
 #include "VCardController.hpp"
-#include <iostream>
-#include <QFile>
-#include <QTextStream>
-#include <QDateTime>
 
 /**
  * Creates the vCard file, using the data from the

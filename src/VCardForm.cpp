@@ -1,5 +1,8 @@
 #include "VCardForm.hpp"
 
+/*
+ * Constructs the interface.
+ */
 VCardForm::VCardForm() {
 	// First name field
 	txtFirstName = new QLineEdit();
@@ -16,8 +19,15 @@ VCardForm::VCardForm() {
 
 	// Create button
 	btnCreate = new QPushButton("&Create");
+	// Connects to the slot
 	QObject::connect(btnCreate, SIGNAL(clicked()), this, SLOT(createVCard()));
 
+	// Quit button
+	btnQuit = new QPushButton("&Quit");
+	// Connects to the slot
+	QObject::connect(btnQuit, SIGNAL(clicked()), this, SLOT(quit()));
+
+	// Creates the layout
 	QGridLayout *layout = new QGridLayout(this);
 	int col = 1;
 	int row = 1;
@@ -37,32 +47,68 @@ VCardForm::VCardForm() {
 
 	col = 1;
 	// fourth row
-	layout->addWidget(btnCreate, row++, col++);
+	layout->addWidget(btnCreate, row, col++);
+	layout->addWidget(btnQuit, row++, col++);
 	
+	// creates a new widget to be the central one in this window
 	centerWidget = new QWidget(this);
+	// sets the constructed layout
 	centerWidget->setLayout(layout);
 
+	// sets the central widget
 	setCentralWidget(centerWidget);
 
+	// centralizes the window
 	QRect fg = frameGeometry();
 	fg.moveCenter(QApplication::desktop()->availableGeometry().center());
-	move(fg.topLeft());
+	move(fg.center());
 }
 
+/*
+ * Destroys the dinamically-allocated objects.
+ */
+VCardForm::~VCardForm() {
+	delete txtFirstName;
+	delete txtLastName;
+	delete txtEmail;
+	delete lblFirstName;
+	delete lblLastName;
+	delete lblEmail;
+	delete btnCreate;
+	delete btnQuit;
+	delete centerWidget;
+}
+
+/*
+ * Creates the model and calls the controller to build a
+ * vCard using the model data.
+ */
 void VCardForm::createVCard() {
-	VCardModel *m = new VCardModel();
+	VCardModel m;
+	// Opens the file selection window
 	QString filepath = QFileDialog::getSaveFileName(0, "Save file", "", "VCard Files (*.vcf)");
 
-	m->setFirstName(txtFirstName->text());
-	m->setLastName(txtLastName->text());
-	m->setEmail(txtEmail->text());
-	m->setFilepath(filepath);
+	// Creates the model
+	m.setFirstName(txtFirstName->text());
+	m.setLastName(txtLastName->text());
+	m.setEmail(txtEmail->text());
+	m.setFilepath(filepath);
 
-	if(controller.createVCard(m)) {
+	// Calls the controller for building the vCard file
+	if(controller.createVCard(&m)) {
+		// If succeeds, shows a success message
 		QMessageBox msgBox(QMessageBox::Information, "Success", "vCard successfully created!");
 		msgBox.exec();
 	} else {
+		// If not, shows an error message
 		QMessageBox msgBox(QMessageBox::Critical, "Error", "vCard could not be created.");
 		msgBox.exec();
 	}
+}
+
+/*
+ * Quits the program.
+ */
+void VCardForm::quit() {
+	QApplication::exit(0);
 }
