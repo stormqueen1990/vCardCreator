@@ -22,8 +22,13 @@ private:
 	QLabel *lblEmail;
 	QPushButton *btnCreate;
 	QPushButton *btnQuit;
+	QVBoxLayout *windowLayout;
+	QGridLayout *fieldGridLayout;
+	QHBoxLayout *buttonBarLayout;
 
 	VCardController controller;
+
+	void cleanScreenFields();
 public slots:
 	void createVCard();
 	void quit();

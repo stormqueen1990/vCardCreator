@@ -4,6 +4,13 @@
  * Constructs the interface.
  */
 VCardForm::VCardForm() {
+	// VBox fieldGridLayout to contain all fieldGridLayouts
+	windowLayout = new QVBoxLayout();
+	windowLayout->setSpacing(5);
+
+	// HBox fieldGridLayout to contain the buttons
+	buttonBarLayout = new QHBoxLayout();
+
 	// First name field
 	txtFirstName = new QLineEdit();
 	// First name label
@@ -27,33 +34,36 @@ VCardForm::VCardForm() {
 	// Connects to the slot
 	QObject::connect(btnQuit, SIGNAL(clicked()), this, SLOT(quit()));
 
-	// Creates the layout
-	QGridLayout *layout = new QGridLayout(this);
+	// Creates the button bar
+	buttonBarLayout->addWidget(btnCreate);
+	buttonBarLayout->addWidget(btnQuit);
+
+	// Creates the fieldGridLayout
+	fieldGridLayout = new QGridLayout(); 
 	int col = 1;
 	int row = 1;
 	// creates the first row
-	layout->addWidget(lblFirstName, row, col++);
-	layout->addWidget(txtFirstName, row++, col++);
+	fieldGridLayout->addWidget(lblFirstName, row, col++);
+	fieldGridLayout->addWidget(txtFirstName, row++, col++);
 
 	col = 1;
 	// second row
-	layout->addWidget(lblLastName, row, col++);
-	layout->addWidget(txtLastName, row++, col++);
+	fieldGridLayout->addWidget(lblLastName, row, col++);
+	fieldGridLayout->addWidget(txtLastName, row++, col++);
 
 	col = 1;
 	// third row
-	layout->addWidget(lblEmail, row, col++);
-	layout->addWidget(txtEmail, row++, col++);
+	fieldGridLayout->addWidget(lblEmail, row, col++);
+	fieldGridLayout->addWidget(txtEmail, row++, col++);
 
-	col = 1;
-	// fourth row
-	layout->addWidget(btnCreate, row, col++);
-	layout->addWidget(btnQuit, row++, col++);
+	// Adds the field grid and button bar to a VBoxLayout
+	windowLayout->addLayout(fieldGridLayout);
+	windowLayout->addLayout(buttonBarLayout);
 	
 	// creates a new widget to be the central one in this window
 	centerWidget = new QWidget(this);
-	// sets the constructed layout
-	centerWidget->setLayout(layout);
+	// sets the constructed fieldGridLayout
+	centerWidget->setLayout(windowLayout);
 
 	// sets the central widget
 	setCentralWidget(centerWidget);
@@ -80,6 +90,16 @@ VCardForm::~VCardForm() {
 }
 
 /*
+ * Cleans the screen fields for a new input.
+ */
+void VCardForm::cleanScreenFields() {
+	txtFirstName->setText(NULL);
+	txtLastName->setText(NULL);
+	txtEmail->setText(NULL);
+	txtFirstName->setFocus();
+}
+
+/*
  * Creates the model and calls the controller to build a
  * vCard using the model data.
  */
@@ -99,6 +119,7 @@ void VCardForm::createVCard() {
 		// If succeeds, shows a success message
 		QMessageBox msgBox(QMessageBox::Information, "Success", "vCard successfully created!");
 		msgBox.exec();
+		cleanScreenFields();
 	} else {
 		// If not, shows an error message
 		QMessageBox msgBox(QMessageBox::Critical, "Error", "vCard could not be created.");
