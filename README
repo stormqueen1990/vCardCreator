@@ -1,3 +1,3 @@
 A vCard file creator, written in C++ using the Qt Framework (http://qt.nokia.com).
-Requires a Qt4 installation and a folder called "dist" to be created on the project folder.
+Requires a Qt4 installation.
 Can be compiled by typing qmake-qt4 (for Makefile generation), then make.
