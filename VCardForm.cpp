@@ -1,5 +1,17 @@
 #include "VCardForm.hpp"
 
+#include <QLabel>
+#include <QWidget>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QDesktopWidget>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QApplication>
+
 /*
  * Constructs the interface.
  */
