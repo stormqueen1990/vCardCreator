@@ -1,10 +1,21 @@
 #ifndef VCARDFORM_HPP
 #define VCARDFORM_HPP
 
-#include <QtGui>
-#include <QApplication>
 #include <iostream>
+
+#include <QMainWindow>
+
 #include "VCardController.hpp"
+
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QWidget;
+class QLineEdit;
+class QPushButton;
+class QVBoxLayout;
+class QGridLayout;
+class QHBoxLayout;
+QT_END_NAMESPACE
 
 class VCardForm : public QMainWindow {
 Q_OBJECT
